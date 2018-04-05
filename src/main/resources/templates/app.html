@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+
+    <div th:replace="fragments/libs :: css"></div>
+</head>
+<body>
+<div ng-app="entrevistaNg">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Fattoria</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#!/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="#!/novo">Novo...</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div ng-view></div>
+</div>
+
+<div th:replace="fragments/libs :: js"></div>
+
+<script type="application/javascript">
+    // Constantes
+    var HOME_PATH = '/';
+    var NOVO_PATH = '/novo';
+    var EDITAR_PATH = '/editar';
+    var URI = 'http://' + window.location.host;
+
+    var produtoUri = function () {
+        return URI + '/api/produto'
+    };
+    var produtoDeletarUri = function () {
+        return produtoUri() + '/deletar';
+    };
+
+    // Ínicio de aplicativo Angularjs
+    angular.module('entrevistaNg', ['ngRoute'])
+        .config(function ($routeProvider) {
+            $routeProvider
+                .when(HOME_PATH, {
+                    templateUrl: '/ng/home.html'
+                })
+                .when(NOVO_PATH, {
+                    templateUrl: '/ng/novo.html'
+                })
+                .when(EDITAR_PATH, {
+                    templateUrl: '/ng/editar.html'
+                })
+                .otherwise({
+                    templateUrl: '/ng/home.html'
+                });
+        })
+        .service('produtoService', ProdutoService)
+        .controller('tabelaProdutoController', TabelaProdutoController)
+        .controller('novoProdutoController', NovoProdutoController)
+        .controller('editarProdutoController', EditarProdutoController);
+
+    function ProdutoService($http, $location) {
+        var this_ = this;
+        this.produtos = null;
+        this.editando = null;
+
+        this.atualizarLista = function () {
+            $http.get(produtoUri())
+                .then(function (response) {
+                    this_.produtos = response.data;
+                });
+        };
+
+        this.novo = function (produto) {
+            return new Promise(function (resolve, reject) {
+                $http.post(produtoUri(), JSON.stringify(produto))
+                    .then(function (response) {
+                        this_.atualizarLista();
+                        $location.path(HOME_PATH);
+                        resolve(response);
+                    })
+                    .catch(function (reason) {
+                        reject(reason);
+                    });
+            });
+        };
+
+        this.excluir = function (produto) {
+            return new Promise(function (resolve, reject) {
+                $http.post(produtoDeletarUri(), JSON.stringify(produto))
+                    .then(function (response) {
+                        this_.atualizarLista();
+                        resolve(response);
+                    })
+                    .catch(function (reason) {
+                        reject(reason);
+                    });
+            });
+        };
+
+        this.atualizar = function (produto) {
+            return new Promise(function (resolve, reject) {
+                $http.put(produtoUri(), JSON.stringify(produto))
+                    .then(function (response) {
+                        this_.atualizarLista();
+                        resolve(response);
+                    })
+                    .catch(function (reason) {
+                        reject(reason);
+                    });
+            });
+        };
+
+        // Atualizar a lista assim que o serviço for inicializado
+        this.atualizarLista();
+    }
+
+    function TabelaProdutoController($scope, $location, produtoService) {
+        $scope.produtoService = produtoService;
+
+        $scope.editar = function (produto) {
+            produtoService.editando = produto;
+            $location.path(EDITAR_PATH);
+        };
+        $scope.excluir = function (produto) {
+            $scope.produtoService.excluir(produto);
+        }
+    }
+
+    function NovoProdutoController($scope, $http, $location, produtoService) {
+        function resetar() {
+            $scope.produto = {
+                nome: '',
+                quantidade: 0,
+                price: 0
+            };
+        }
+
+        resetar();
+        $scope.enviar = function () {
+            produtoService.novo($scope.produto);
+        };
+    }
+
+    function EditarProdutoController($scope, $location, produtoService) {
+        $scope.produtoService = produtoService;
+
+        $scope.atualizar = function () {
+            produtoService.atualizar(produtoService.editando);
+            produtoService.atualizarLista();
+            $location.path(HOME_PATH);
+        }
+    }
+</script>
+</body>
+</html>

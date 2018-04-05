@@ -1,0 +1,35 @@
+<div class="container" data-ng-controller="novoProdutoController">
+    <div class="py-5 text-center">
+        <h2>Adicionar Produto</h2>
+        <p class="lead">Os produtos são validados com o formulário do HTML 5.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form class="needs-validation">
+                <div class="row pb-3">
+                    <div class="col-md-4">
+                        <label for="nome">Nome</label>
+                        <input type="text" data-ng-model="produto.nome" class="form-control" id="nome" placeholder=""
+                               required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="quantidade">Quantidade</label>
+                        <input type="number" data-ng-model="produto.quantidade" class="form-control" id="quantidade"
+                               placeholder="" min="0"
+                               required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="price">Preço</label>
+                        <div class="input-group">
+                            <input type="number" data-ng-model="produto.price" class="form-control" id="price"
+                                   placeholder="" min="0" required>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-lg btn-block"
+                        data-ng-click="enviar()" type="submit">Adicionar</button>
+            </form>
+        </div>
+    </div>
+</div>
