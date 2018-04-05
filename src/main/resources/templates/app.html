@@ -134,7 +134,9 @@
             $location.path(EDITAR_PATH);
         };
         $scope.excluir = function (produto) {
-            $scope.produtoService.excluir(produto);
+            if (confirm('Tem certeza que quer excluir ' + produto.nome + '?')) {
+                $scope.produtoService.excluir(produto);
+            }
         }
     }
 
