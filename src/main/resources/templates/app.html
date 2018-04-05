@@ -39,7 +39,7 @@
     var HOME_PATH = '/';
     var NOVO_PATH = '/novo';
     var EDITAR_PATH = '/editar';
-    var URI = 'http://' + window.location.host;
+    var URI = location.protocol + '//' + window.location.host;
 
     var produtoUri = function () {
         return URI + '/api/produto'
