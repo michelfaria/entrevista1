@@ -8,29 +8,31 @@
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="panel-body"></div>
-            <table class="table" id="tabela-produtos">
-                <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Qtd.</th>
-                    <th>Preço</th>
-                    <th>Data de Cadastro</th>
-                    <th>Opções</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="produto in produtoService.produtos">
-                    <td>{{produto.nome}}</td>
-                    <td>{{produto.quantidade}}</td>
-                    <td>{{produto.price}}</td>
-                    <td>{{produto.dataDeCadastro}}</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" data-ng-click="editar(produto)">Editar</button>
-                        <button class="btn btn-danger btn-sm" data-ng-click="excluir(produto)">Excluir</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table" id="tabela-produtos">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Qtd.</th>
+                        <th>Preço</th>
+                        <th>Data de Cadastro</th>
+                        <th>Opções</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="produto in produtoService.produtos">
+                        <td>{{produto.nome}}</td>
+                        <td>{{produto.quantidade}}</td>
+                        <td>{{produto.price}}</td>
+                        <td>{{produto.dataDeCadastro}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" data-ng-click="editar(produto)">Editar</button>
+                            <button class="btn btn-danger btn-sm" data-ng-click="excluir(produto)">Excluir</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
