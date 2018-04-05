@@ -6,6 +6,9 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import java.util.Date;
 
+/**
+ * Meta-modelo estático para criação de queries tipadas
+ */
 @StaticMetamodel(Produto.class)
 public class Produto_ {
     public static volatile SingularAttribute<Produto, String> nome;
